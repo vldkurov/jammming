@@ -1,0 +1,13 @@
+
+.SearchResults {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.SearchResults h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+/* Add any additional styles for the Tracklist component if needed */

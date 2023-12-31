@@ -1,0 +1,16 @@
+
+.Track {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+}
+
+.Track-information {
+    width: 100%;
+}
+
+.Track h3 {
+    margin: 0;
+}
