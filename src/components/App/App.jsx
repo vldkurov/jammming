@@ -13,7 +13,13 @@ const App = () => {
     ]);
 
     const [playlist, setPlaylist] = useState([
-        {id: '3', name: 'Playlist Song 1', artist: 'Playlist Artist 1', album: 'Playlist Album 1'},
+        {
+            id: '3',
+            name: 'Playlist Song 1',
+            artist: 'Playlist Artist 1',
+            album: 'Playlist Album 1',
+            uri: 'spotify:track:abc123',
+        },
         // Add more playlist track objects as needed
     ]);
 
@@ -25,7 +31,9 @@ const App = () => {
 
         // If the track is not in the playlist, add it
         if (!isTrackInPlaylist) {
-            setPlaylist((prevPlaylist) => [...prevPlaylist, track]);
+            // For testing purposes, add a mock uri to the track
+            const trackWithUri = {...track, uri: `spotify:track:${Math.random().toString(36).substring(7)}`};
+            setPlaylist((prevPlaylist) => [...prevPlaylist, trackWithUri]);
         }
     };
 
@@ -37,6 +45,16 @@ const App = () => {
 
     const handlePlaylistNameChange = (newName) => {
         setPlaylistName(newName);
+    };
+
+    const savePlaylist = () => {
+        // Mock data for testing, replace with actual Spotify API integration
+        const uriArray = playlist.map((track) => track.uri);
+        console.log('URI Array:', uriArray);
+
+        // Reset the playlist after saving
+        setPlaylist([]);
+        setPlaylistName('New Playlist');
     };
 
     return (
@@ -56,7 +74,9 @@ const App = () => {
                     />
                 </div>
             </div>
-            <button className={styles['App-save-button']}>Save to Spotify</button>
+            <button className={styles['App-save-button']} onClick={savePlaylist}>
+                Save to Spotify
+            </button>
         </div>
     );
 };
