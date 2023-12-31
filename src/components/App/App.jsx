@@ -1,11 +1,19 @@
 // src/components/App/App.js
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import SearchBar from '../SearchBar/SearchBar';
 import SearchResults from '../SearchResults/SearchResults';
 import Playlist from '../Playlist/Playlist';
 import styles from './App.module.css';
+import Spotify from "../../Spotify";
 
 const App = () => {
+
+    useEffect(() => {
+        const token = Spotify.getAccessToken();
+        // Use the access token for making Spotify API requests or other actions in your app
+        console.log('Access Token:', token);
+    }, []);
+
     const [searchResults, setSearchResults] = useState([
         {id: '1', name: 'Song 1', artist: 'Artist 1', album: 'Album 1'},
         {id: '2', name: 'Song 2', artist: 'Artist 2', album: 'Album 2'},
