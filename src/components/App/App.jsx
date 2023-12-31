@@ -11,16 +11,7 @@ const App = () => {
 
     const [searchResults, setSearchResults] = useState([]);
 
-    const [playlist, setPlaylist] = useState([
-        // {
-        //     id: '3',
-        //     name: 'Playlist Song 1',
-        //     artist: 'Playlist Artist 1',
-        //     album: 'Playlist Album 1',
-        //     uri: 'spotify:track:abc123',
-        // },
-        // Add more playlist track objects as needed
-    ]);
+    const [playlist, setPlaylist] = useState([]);
 
     const [playlistName, setPlaylistName] = useState('My Playlist'); // State for the playlist name
 
