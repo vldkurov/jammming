@@ -8,30 +8,27 @@ import Spotify from "../../Spotify";
 
 const App = () => {
 
+
+    const [searchResults, setSearchResults] = useState([]);
+
+    const [playlist, setPlaylist] = useState([
+        // {
+        //     id: '3',
+        //     name: 'Playlist Song 1',
+        //     artist: 'Playlist Artist 1',
+        //     album: 'Playlist Album 1',
+        //     uri: 'spotify:track:abc123',
+        // },
+        // Add more playlist track objects as needed
+    ]);
+
+    const [playlistName, setPlaylistName] = useState('My Playlist'); // State for the playlist name
+
     useEffect(() => {
         const token = Spotify.getAccessToken();
         // Use the access token for making Spotify API requests or other actions in your app
         console.log('Access Token:', token);
     }, []);
-
-    const [searchResults, setSearchResults] = useState([
-        {id: '1', name: 'Song 1', artist: 'Artist 1', album: 'Album 1'},
-        {id: '2', name: 'Song 2', artist: 'Artist 2', album: 'Album 2'},
-        // Add more track objects as needed
-    ]);
-
-    const [playlist, setPlaylist] = useState([
-        {
-            id: '3',
-            name: 'Playlist Song 1',
-            artist: 'Playlist Artist 1',
-            album: 'Playlist Album 1',
-            uri: 'spotify:track:abc123',
-        },
-        // Add more playlist track objects as needed
-    ]);
-
-    const [playlistName, setPlaylistName] = useState('My Playlist'); // State for the playlist name
 
     const addTrackToPlaylist = (track) => {
         // Check if the track is already in the playlist
@@ -65,11 +62,15 @@ const App = () => {
         setPlaylistName('New Playlist');
     };
 
+    const handleSearch = (results) => {
+        setSearchResults(results);
+    };
+
     return (
         <div className={styles.App}>
             <h1>Jammming</h1>
             <div className={styles['App-container']}>
-                <SearchBar/>
+                <SearchBar onSearch={handleSearch}/>
                 <div className={styles['App-search-results']}>
                     <SearchResults searchResults={searchResults} onAdd={addTrackToPlaylist}/>
                 </div>
