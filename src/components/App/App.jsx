@@ -25,12 +25,6 @@ const App = () => {
         // Check if the track is already in the playlist
         const isTrackInPlaylist = playlist.some((playlistTrack) => playlistTrack.id === track.id);
 
-        // If the track is not in the playlist, add it
-        // if (!isTrackInPlaylist) {
-        //     // For testing purposes, add a mock uri to the track
-        //     const trackWithUri = {...track, uri: `spotify:track:${Math.random().toString(36).substring(7)}`};
-        //     setPlaylist((prevPlaylist) => [...prevPlaylist, trackWithUri]);
-        // }
         if (!isTrackInPlaylist) {
             setPlaylist((prevPlaylist) => [...prevPlaylist, track]);
         }
@@ -46,14 +40,34 @@ const App = () => {
         setPlaylistName(newName);
     };
 
-    const savePlaylist = () => {
-        // Mock data for testing, replace with actual Spotify API integration
-        const uriArray = playlist.map((track) => track.uri);
-        console.log('URI Array:', uriArray);
+    const savePlaylist = async () => {
 
-        // Reset the playlist after saving
-        setPlaylist([]);
-        setPlaylistName('New Playlist');
+        const userId = await Spotify.getUserId();
+
+        if (!userId) {
+            console.error('User ID is missing.');
+            return;
+        }
+
+        const playlistId = await Spotify.createPlaylist(userId, playlistName);
+
+        if (!playlistId) {
+            console.error('Failed to create playlist.');
+            return;
+        }
+
+        const trackUris = playlist.map(track => track.uri);
+
+        try {
+            await Spotify.addTracksToPlaylist(userId, playlistId, trackUris);
+            console.log('Playlist saved successfully!');
+            // Optionally, reset the playlist in your state or perform other actions.
+            setPlaylist([]);
+            setPlaylistName('New Playlist');
+        } catch (error) {
+            console.error('Error adding tracks to playlist:', error);
+        }
+        
     };
 
     const handleSearch = (results) => {
