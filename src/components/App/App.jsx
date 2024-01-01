@@ -79,12 +79,10 @@ const App = () => {
         <>
             <SearchAppBar onSearch={handleSearch}/>
             <Box sx={{flexGrow: 1, paddingX: 1}}>
-                {/*<Container >*/}
                 <Grid container spacing={1}>
                     <Grid xs={6}>
                         <SearchResults searchResults={searchResults} onAdd={addTrackToPlaylist}/>
                     </Grid>
-                    {/*<Divider orientation="vertical" flexItem/>*/}
                     <Grid xs={6}>
                         <Playlist
                             playlist={playlist}
@@ -93,12 +91,8 @@ const App = () => {
                             onRemove={removeTrackFromPlaylist}
                             savePlaylist={savePlaylist}
                         />
-                        {/*<button className={styles['App-save-button']} onClick={savePlaylist}>*/}
-                        {/*    Save to Spotify*/}
-                        {/*</button>*/}
                     </Grid>
                 </Grid>
-                {/*</Container>*/}
             </Box>
 
 
