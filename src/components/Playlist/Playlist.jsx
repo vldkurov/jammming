@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import Tracklist from '../Tracklist/Tracklist';
-import styles from './Playlist.module.css';
+import Grid from "@mui/material/Unstable_Grid2";
+import {Button} from "@mui/material";
 
 const usePlaylistController = (playlist, playlistName, onNameChange, onRemove) => {
     const [isEditing, setIsEditing] = useState(false);
@@ -32,7 +33,7 @@ const usePlaylistController = (playlist, playlistName, onNameChange, onRemove) =
     };
 }
 
-const Playlist = ({playlist, playlistName, onNameChange, onRemove}) => {
+const Playlist = ({playlist, playlistName, onNameChange, onRemove, savePlaylist}) => {
     const {
         isEditing,
         handlePlaylistNameClick,
@@ -42,23 +43,51 @@ const Playlist = ({playlist, playlistName, onNameChange, onRemove}) => {
         newName
     } = usePlaylistController(playlist, playlistName, onNameChange, onRemove);
 
+    const myStyle = {
+        borderWidth: 1,
+        borderStyle: 'solid',
+        borderColor: 'red',
+    };
+
+    const headerStyle = {
+        display: 'flex',
+        justifyContent: 'flex-start'
+    }
+
+    const buttonStyle = {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        paddingTop: 20,
+        paddingBottom: 20,
+        paddingRight: 18,
+    }
+
     return (
-        <div className={styles.Playlist}>
-            <div className={styles['Playlist-header']}>
-                {isEditing ? (
-                    <input
-                        type="text"
-                        placeholder="Enter Playlist Name"
-                        value={newName}
-                        onChange={handleNewNameChange}
-                        onBlur={handlePlaylistNameBlur}
-                    />
-                ) : (
-                    <h2 onClick={handlePlaylistNameClick}>{playlistName}</h2>
-                )}
-            </div>
+        <>
+            <>
+                <Grid container spacing={1}>
+                    <Grid xs={6} style={{...headerStyle}}>
+                        {isEditing ? (
+                            <input
+                                type="text"
+                                placeholder="Enter Playlist Name"
+                                value={newName}
+                                onChange={handleNewNameChange}
+                                onBlur={handlePlaylistNameBlur}
+                            />
+                        ) : (
+                            <h2 onClick={handlePlaylistNameClick}>{playlistName}</h2>
+                        )}
+                    </Grid>
+                    <Grid xs={6} style={{...buttonStyle}}>
+                        <Button variant="contained" color="success" onClick={savePlaylist}>
+                            Save to Spotify
+                        </Button>
+                    </Grid>
+                </Grid>
+            </>
             <Tracklist tracks={playlist} onRemove={handleRemoveTrack} isRemovable={true}/>
-        </div>
+        </>
     );
 };
 
