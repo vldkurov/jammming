@@ -1,14 +1,30 @@
 import React, {useEffect, useState} from 'react';
-import SearchBar from '../SearchBar/SearchBar';
 import SearchResults from '../SearchResults/SearchResults';
 import Playlist from '../Playlist/Playlist';
-import styles from './App.module.css';
 import Spotify from "../../utility/Spotify";
+
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
+import SearchAppBar from "../SearchAppBar/SearchAppBar";
+// import {Grid} from "@mui/material";
+import Grid from '@mui/material/Unstable_Grid2';
+import Box from "@mui/material/Box";
+
 
 const App = () => {
     const [searchResults, setSearchResults] = useState([]);
     const [playlist, setPlaylist] = useState([]);
     const [playlistName, setPlaylistName] = useState('My Playlist');
+
+    useEffect(() => {
+        document.body.style.backgroundColor = "#9adcfb"
+
+        return () => {
+            document.body.style.backgroundColor = null; // revert to previous style on component unmounting
+        }
+    }, []);
 
     useEffect(() => {
         Spotify.getAccessToken();
@@ -59,26 +75,35 @@ const App = () => {
     };
 
     return (
-        <div className={styles.App}>
-            <h1>Jammming</h1>
-            <div className={styles['App-container']}>
-                <SearchBar onSearch={handleSearch}/>
-                <div className={styles['App-search-results']}>
-                    <SearchResults searchResults={searchResults} onAdd={addTrackToPlaylist}/>
-                </div>
-                <div className={styles['App-playlist']}>
-                    <Playlist
-                        playlist={playlist}
-                        playlistName={playlistName}
-                        onNameChange={handlePlaylistNameChange}
-                        onRemove={removeTrackFromPlaylist}
-                    />
-                </div>
-            </div>
-            <button className={styles['App-save-button']} onClick={savePlaylist}>
-                Save to Spotify
-            </button>
-        </div>
+
+        <>
+            <SearchAppBar onSearch={handleSearch}/>
+            <Box sx={{flexGrow: 1, paddingX: 1}}>
+                {/*<Container >*/}
+                <Grid container spacing={1}>
+                    <Grid xs={6}>
+                        <SearchResults searchResults={searchResults} onAdd={addTrackToPlaylist}/>
+                    </Grid>
+                    {/*<Divider orientation="vertical" flexItem/>*/}
+                    <Grid xs={6}>
+                        <Playlist
+                            playlist={playlist}
+                            playlistName={playlistName}
+                            onNameChange={handlePlaylistNameChange}
+                            onRemove={removeTrackFromPlaylist}
+                            savePlaylist={savePlaylist}
+                        />
+                        {/*<button className={styles['App-save-button']} onClick={savePlaylist}>*/}
+                        {/*    Save to Spotify*/}
+                        {/*</button>*/}
+                    </Grid>
+                </Grid>
+                {/*</Container>*/}
+            </Box>
+
+
+        </>
+
     );
 };
 

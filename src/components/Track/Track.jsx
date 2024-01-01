@@ -8,10 +8,10 @@ const Track = ({track, onAdd, onRemove, isRemovable}) => {
     const handleRemove = onRemove ? onRemove.bind(null, track) : undefined;
 
     return (
-        <div className={styles.Track}>
+        <>
             <TrackInformation name={name} artist={artist} album={album}/>
             {isRemovable ? <RemoveButton onClick={handleRemove}/> : <AddButton onClick={handleAdd}/>}
-        </div>
+        </>
     );
 };
 
