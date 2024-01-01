@@ -28,7 +28,6 @@ const Spotify = {
             return this.accessToken;
         } else {
             // Redirect the user to the Spotify authorization page
-            // const redirectUri = 'http://localhost:3000/'; // Update with your app's redirect URI
             const scope = 'user-read-private user-read-email playlist-modify-private'; // Add additional scopes as needed
             window.location = `https://accounts.spotify.com/authorize?client_id=${Client_ID}&redirect_uri=${redirectUri}&scope=${scope}&response_type=token`;
         }
@@ -57,6 +56,95 @@ const Spotify = {
                 }));
             });
     },
+
+    getUserId: async function () {
+        const accessToken = this.getAccessToken();
+
+        if (!accessToken) {
+            console.error('Access token is missing.');
+            return null;
+        }
+
+        try {
+            const response = await fetch('https://api.spotify.com/v1/me', {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                return data.id;
+            } else {
+                console.error('Failed to fetch user ID:', response.statusText);
+                return null;
+            }
+        } catch (error) {
+            console.error('Error fetching user ID:', error);
+            return null;
+        }
+    },
+
+    createPlaylist: async function (userId, playlistName) {
+        const accessToken = this.getAccessToken();
+
+        if (!accessToken) {
+            console.error('Access token is missing.');
+            return null;
+        }
+
+        try {
+            const response = await fetch(`https://api.spotify.com/v1/users/${userId}/playlists`, {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: playlistName,
+                    description: 'Custom playlist created with Jammming',
+                    public: false,
+                }),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                return data.id; // Return the ID of the created playlist
+            } else {
+                console.error('Failed to create playlist:', response.statusText);
+                return null;
+            }
+        } catch (error) {
+            console.error('Error creating playlist:', error);
+            return null;
+        }
+    },
+
+    addTracksToPlaylist: async function (userId, playlistId, trackUris) {
+        const accessToken = this.getAccessToken();
+
+        if (!accessToken) {
+            console.error('Access token is missing.');
+            return;
+        }
+
+        try {
+            await fetch(`https://api.spotify.com/v1/users/${userId}/playlists/${playlistId}/tracks`, {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    uris: trackUris,
+                }),
+            });
+        } catch (error) {
+            console.error('Error adding tracks to playlist:', error);
+        }
+    },
+
+
 };
 
 export default Spotify;
