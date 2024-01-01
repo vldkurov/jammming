@@ -1,37 +1,31 @@
-// src/components/App/App.js
 import React, {useEffect, useState} from 'react';
 import SearchBar from '../SearchBar/SearchBar';
 import SearchResults from '../SearchResults/SearchResults';
 import Playlist from '../Playlist/Playlist';
 import styles from './App.module.css';
-import Spotify from "../../Spotify";
+import Spotify from "../../utility/Spotify";
 
 const App = () => {
-
-
     const [searchResults, setSearchResults] = useState([]);
-
     const [playlist, setPlaylist] = useState([]);
-
-    const [playlistName, setPlaylistName] = useState('My Playlist'); // State for the playlist name
+    const [playlistName, setPlaylistName] = useState('My Playlist');
 
     useEffect(() => {
-        const token = Spotify.getAccessToken();
-        // Use the access token for making Spotify API requests or other actions in your app
-        console.log('Access Token:', token);
+        Spotify.getAccessToken();
     }, []);
 
-    const addTrackToPlaylist = (track) => {
-        // Check if the track is already in the playlist
-        const isTrackInPlaylist = playlist.some((playlistTrack) => playlistTrack.id === track.id);
+    const handleError = (error, message) => {
+        console.error(message, error);
+    };
 
+    const addTrackToPlaylist = (track) => {
+        const isTrackInPlaylist = playlist.some((playlistTrack) => playlistTrack.id === track.id);
         if (!isTrackInPlaylist) {
-            setPlaylist((prevPlaylist) => [...prevPlaylist, track]);
+            setPlaylist(prevPlaylist => [...prevPlaylist, track]);
         }
     };
 
     const removeTrackFromPlaylist = (track) => {
-        // Implement the logic to remove a track from the playlist
         const updatedPlaylist = playlist.filter((playlistTrack) => playlistTrack.id !== track.id);
         setPlaylist(updatedPlaylist);
     };
@@ -41,33 +35,23 @@ const App = () => {
     };
 
     const savePlaylist = async () => {
-
-        const userId = await Spotify.getUserId();
-
-        if (!userId) {
-            console.error('User ID is missing.');
-            return;
-        }
-
-        const playlistId = await Spotify.createPlaylist(userId, playlistName);
-
-        if (!playlistId) {
-            console.error('Failed to create playlist.');
-            return;
-        }
-
-        const trackUris = playlist.map(track => track.uri);
-
         try {
+            const userId = await Spotify.getUserId();
+            if (!userId) throw new Error('User ID is missing.');
+
+            const playlistId = await Spotify.createPlaylist(userId, playlistName);
+            if (!playlistId) throw new Error('Failed to create playlist.');
+
+            const trackUris = playlist.map(track => track.uri);
+
             await Spotify.addTracksToPlaylist(userId, playlistId, trackUris);
             console.log('Playlist saved successfully!');
-            // Optionally, reset the playlist in your state or perform other actions.
+
             setPlaylist([]);
             setPlaylistName('New Playlist');
         } catch (error) {
-            console.error('Error adding tracks to playlist:', error);
+            handleError(error, 'Error during playlist saving: ');
         }
-        
     };
 
     const handleSearch = (results) => {

@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import styles from './SearchBar.module.css';
-import Spotify from "../../Spotify";
+import Spotify from "../../utility/Spotify";
 
 const SearchBar = ({onSearch}) => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -9,18 +9,26 @@ const SearchBar = ({onSearch}) => {
         setSearchTerm(event.target.value);
     };
 
-    const handleSearchSubmit = (event) => {
-        event.preventDefault();
-        if (searchTerm.trim() !== '') {
-            Spotify.search(searchTerm).then((results) => {
-                // Pass the search results to the parent component
-                onSearch(results);
-            });
+    const performSearch = async () => {
+        if (searchTerm.trim() === '') return;
+        try {
+            const results = await Spotify.search(searchTerm);
+            setSearchTerm('');
+            // Pass the search results to the parent component
+            onSearch(results);
+        } catch (error) {
+            console.error("Failed to perform the search:", error);
         }
     };
 
+    const handleSearchSubmit = async (event) => {
+        event.preventDefault();
+        const wasSuccessful = await performSearch();
+        wasSuccessful && console.log('Search successful');
+    };
+
     return (
-        <div className={styles.SearchBar}>
+        <div data-testid="search-bar" className={styles.SearchBar}>
             <input
                 type="text"
                 placeholder="Enter A Song, Album, or Artist"

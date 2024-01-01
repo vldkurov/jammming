@@ -6,6 +6,22 @@ const Spotify = {
     accessToken: '', // Store the access token
     expiresIn: 0, // Store the expiration time in seconds
 
+    handleError(message, error) {
+        console.error(message, error);
+    },
+
+    getHeaders() {
+        const accessToken = this.getAccessToken();
+        if (!accessToken) {
+            this.handleError('Access token is missing.');
+            return null;
+        }
+        return {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+        };
+    },
+
     getAccessToken() {
         if (this.accessToken) {
             return this.accessToken; // Return the access token if it's already set
@@ -34,12 +50,11 @@ const Spotify = {
     },
 
     search(term) {
-        const accessToken = this.getAccessToken();
+        const headers = this.getHeaders();
+        if (!headers) return;
 
         return fetch(`https://api.spotify.com/v1/search?type=track&q=${term}`, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-            },
+            headers: headers
         })
             .then((response) => response.json())
             .then((data) => {
@@ -58,18 +73,12 @@ const Spotify = {
     },
 
     getUserId: async function () {
-        const accessToken = this.getAccessToken();
-
-        if (!accessToken) {
-            console.error('Access token is missing.');
-            return null;
-        }
+        const headers = this.getHeaders();
+        if (!headers) return null;
 
         try {
             const response = await fetch('https://api.spotify.com/v1/me', {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                },
+                headers: headers
             });
 
             if (response.ok) {
@@ -86,20 +95,13 @@ const Spotify = {
     },
 
     createPlaylist: async function (userId, playlistName) {
-        const accessToken = this.getAccessToken();
-
-        if (!accessToken) {
-            console.error('Access token is missing.');
-            return null;
-        }
+        const headers = this.getHeaders();
+        if (!headers) return null;
 
         try {
             const response = await fetch(`https://api.spotify.com/v1/users/${userId}/playlists`, {
                 method: 'POST',
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                    'Content-Type': 'application/json',
-                },
+                headers: headers,
                 body: JSON.stringify({
                     name: playlistName,
                     description: 'Custom playlist created with Jammming',
@@ -121,20 +123,13 @@ const Spotify = {
     },
 
     addTracksToPlaylist: async function (userId, playlistId, trackUris) {
-        const accessToken = this.getAccessToken();
-
-        if (!accessToken) {
-            console.error('Access token is missing.');
-            return;
-        }
+        const headers = this.getHeaders();
+        if (!headers) return;
 
         try {
             await fetch(`https://api.spotify.com/v1/users/${userId}/playlists/${playlistId}/tracks`, {
                 method: 'POST',
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                    'Content-Type': 'application/json',
-                },
+                headers: headers,
                 body: JSON.stringify({
                     uris: trackUris,
                 }),
