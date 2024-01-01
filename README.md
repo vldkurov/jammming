@@ -85,3 +85,63 @@ here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-
 #### git rm --cached .env
 
 #### git rm --cached -r .idea
+
+# Jammming App Component Documentation
+
+Overview
+
+The App component is the main container for the Jammming web application. It orchestrates the interaction between the
+SearchBar, SearchResults, and Playlist components, allowing users to search for songs, create custom playlists, and save
+them to their Spotify accounts.
+
+Table of Contents
+
+Prerequisites
+Component Structure
+State Variables
+UseEffect
+Error Handling
+Methods
+Rendering
+Prerequisites
+
+React
+Spotify API Key
+Component Structure
+
+The App component comprises the following components:
+
+SearchBar: Allows users to input search queries.
+SearchResults: Displays search results and provides an option to add tracks to the playlist.
+Playlist: Represents the user's custom playlist and provides options to edit the playlist name, remove tracks, and save
+the playlist.
+State Variables
+
+searchResults: Represents the list of tracks obtained from the Spotify search.
+playlist: Represents the user's custom playlist.
+playlistName: Represents the name of the custom playlist.
+UseEffect
+
+The useEffect hook is utilized to ensure that the Spotify access token is obtained when the component mounts. This is
+essential for making authenticated requests to the Spotify API.
+
+Error Handling
+
+The handleError function logs errors to the console for debugging purposes. It is invoked in case of errors during the
+execution of asynchronous methods.
+
+Methods
+
+addTrackToPlaylist(track): Adds a track to the custom playlist if it is not already present.
+removeTrackFromPlaylist(track): Removes a track from the custom playlist.
+handlePlaylistNameChange(newName): Updates the playlist name based on user input.
+savePlaylist(): Saves the custom playlist to the user's Spotify account by creating a new playlist, adding tracks to it,
+and resetting the playlist state.
+handleSearch(results): Updates the searchResults state based on the search query results.
+Rendering
+
+The render method returns JSX to create the overall layout of the Jammming app. It includes the SearchBar,
+SearchResults, and Playlist components, along with a "Save to Spotify" button for users to export their playlists.
+
+Styles
+The component utilizes modular CSS for styling, and the styles are imported from the App.module.css file.
