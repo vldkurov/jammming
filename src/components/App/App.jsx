@@ -26,10 +26,13 @@ const App = () => {
         const isTrackInPlaylist = playlist.some((playlistTrack) => playlistTrack.id === track.id);
 
         // If the track is not in the playlist, add it
+        // if (!isTrackInPlaylist) {
+        //     // For testing purposes, add a mock uri to the track
+        //     const trackWithUri = {...track, uri: `spotify:track:${Math.random().toString(36).substring(7)}`};
+        //     setPlaylist((prevPlaylist) => [...prevPlaylist, trackWithUri]);
+        // }
         if (!isTrackInPlaylist) {
-            // For testing purposes, add a mock uri to the track
-            const trackWithUri = {...track, uri: `spotify:track:${Math.random().toString(36).substring(7)}`};
-            setPlaylist((prevPlaylist) => [...prevPlaylist, trackWithUri]);
+            setPlaylist((prevPlaylist) => [...prevPlaylist, track]);
         }
     };
 

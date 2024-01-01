@@ -29,7 +29,7 @@ const Spotify = {
         } else {
             // Redirect the user to the Spotify authorization page
             // const redirectUri = 'http://localhost:3000/'; // Update with your app's redirect URI
-            const scope = 'user-read-private user-read-email'; // Add additional scopes as needed
+            const scope = 'user-read-private user-read-email playlist-modify-private'; // Add additional scopes as needed
             window.location = `https://accounts.spotify.com/authorize?client_id=${Client_ID}&redirect_uri=${redirectUri}&scope=${scope}&response_type=token`;
         }
     },
