@@ -3,21 +3,15 @@ import BasicCard from "../BasicCard/BasicCard";
 
 const Tracklist = ({tracks, onAdd, onRemove, isRemovable}) => {
 
-    const renderTrack = (track) => {
-        return (
-            <>
+    return (
+        <>
+            {tracks.map(track =>
                 <BasicCard key={track.id}
                            track={track}
                            onAdd={onAdd}
                            onRemove={onRemove}
                            isRemovable={isRemovable}/>
-            </>
-        );
-    };
-
-    return (
-        <>
-            {tracks.map(renderTrack)}
+            )}
         </>
     );
 };

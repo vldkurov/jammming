@@ -53,10 +53,10 @@ const App = () => {
     const savePlaylist = async () => {
         try {
             const userId = await Spotify.getUserId();
-            if (!userId) throw new Error('User ID is missing.');
+            if (!userId) new Error('User ID is missing.');
 
             const playlistId = await Spotify.createPlaylist(userId, playlistName);
-            if (!playlistId) throw new Error('Failed to create playlist.');
+            if (!playlistId) new Error('Failed to create playlist.');
 
             const trackUris = playlist.map(track => track.uri);
 
@@ -94,10 +94,7 @@ const App = () => {
                     </Grid>
                 </Grid>
             </Box>
-
-
         </>
-
     );
 };
 
