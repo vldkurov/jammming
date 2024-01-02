@@ -43,12 +43,6 @@ const Playlist = ({playlist, playlistName, onNameChange, onRemove, savePlaylist}
         newName
     } = usePlaylistController(playlist, playlistName, onNameChange, onRemove);
 
-    const myStyle = {
-        borderWidth: 1,
-        borderStyle: 'solid',
-        borderColor: 'red',
-    };
-
     const headerStyle = {
         display: 'flex',
         justifyContent: 'flex-start'
